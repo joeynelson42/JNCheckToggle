@@ -37,6 +37,7 @@ class View: UIView {
     func configureSubviews(){
         check.setUntoggledValues(cornerRadius: 2, color: UIColor.darkGrayColor(), rotation: 0)
         check.setToggledValues(cornerRadius: 15, color: UIColor.dodger(), rotation: Float(M_PI))
+        check.style = CheckToggleStyle.light
         addSubview(check)
     }
     

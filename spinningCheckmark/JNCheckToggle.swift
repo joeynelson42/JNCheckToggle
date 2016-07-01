@@ -27,6 +27,12 @@ enum CheckToggleState {
     case untoggled
 }
 
+enum CheckToggleStyle {
+    case none
+    case light
+    case dark
+}
+
 struct AnimationValues {
     var cornerRadius: CGFloat!
     var color: UIColor!
@@ -35,7 +41,7 @@ struct AnimationValues {
 
 import UIKit
 
-class JNCheckToggle: UIView {
+@IBDesignable class JNCheckToggle: UIView {
     
     // MARK: Properties
     private let containerView = UIButton()
@@ -44,6 +50,12 @@ class JNCheckToggle: UIView {
     /// The state of the checkToggle
     internal var state = CheckToggleState.untoggled
     
+    /// The color of the checkmark
+    internal var style = CheckToggleStyle.light {
+        didSet {
+            configureStyle()
+        }
+    }
     internal var delegate: JNCheckToggleDelegate?
     
     /// The duration of the toggle animation
@@ -60,9 +72,10 @@ class JNCheckToggle: UIView {
         self.init(frame: CGRectZero)
     }
     
-    convenience init(initialState: CheckToggleState) {
+    convenience init(initialState: CheckToggleState, style: CheckToggleStyle = CheckToggleStyle.light) {
         self.init(frame: CGRectZero)
         self.state = initialState
+        self.style = style
     }
     
     override init(frame: CGRect) {
@@ -231,8 +244,8 @@ class JNCheckToggle: UIView {
         containerView.addTarget(self, action: #selector(JNCheckToggle.animateToggle), forControlEvents: .TouchUpInside)
 
         checkmark.transform = CGAffineTransformMakeScale(0.0001, 0.0001)
+        configureStyle()
         
-        checkmark.image = UIImage(named: "lightCheckmark")
         checkmark.contentMode = .ScaleAspectFit
         
         addSubview(containerView)
@@ -251,5 +264,16 @@ class JNCheckToggle: UIView {
     private func configureWithAnimationValues(values: AnimationValues) {
         containerView.backgroundColor = values.color
         containerView.layer.cornerRadius = values.cornerRadius
+    }
+    
+    private func configureStyle() {
+        switch style {
+        case .none:
+            checkmark.hidden = true
+        case .light:
+            checkmark.image = UIImage(named: "lightCheckmark")
+        case .dark:
+            checkmark.image = UIImage(named: "darkCheckmark")
+        }
     }
 }
