@@ -35,8 +35,10 @@ class View: UIView {
     }
     
     func configureSubviews(){
-        check.setUntoggledValues(cornerRadius: 2, color: UIColor.darkGrayColor(), rotation: 0)
-        check.setToggledValues(cornerRadius: 15, color: UIColor.dodger(), rotation: Float(M_PI))
+        self.backgroundColor = UIColor.whiteColor()
+        
+        check.setUntoggledValues(.whiteColor(), rotation: 0)
+        check.setToggledValues(.dodger(), rotation: Float(M_PI))
         check.style = CheckToggleStyle.light
         addSubview(check)
     }
@@ -45,7 +47,7 @@ class View: UIView {
         check.addConstraints(
             Constraint.cxcx.of(self),
             Constraint.cycy.of(self),
-            Constraint.wh.of(30)
+            Constraint.wh.of(50)
         )
     }
 }

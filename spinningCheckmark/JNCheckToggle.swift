@@ -37,6 +37,7 @@ struct AnimationValues {
     var cornerRadius: CGFloat!
     var color: UIColor!
     var rotation: Float!
+    var borderWidth: CGFloat!
 }
 
 import UIKit
@@ -61,11 +62,17 @@ import UIKit
     /// The duration of the toggle animation
     internal var duration = 0.4
     
+    /// The untoggled cornerRadius
+    internal var initialCornerRadius: CGFloat = 2.0
+    
+    /// The size of the checkToggle
+    internal var containerSize:CGFloat = 40
+    
     ///Contains the values for the untoggled checkmark, configure with ::configureToggledValues
-    private var fromValues = AnimationValues(cornerRadius: 0, color: UIColor.whiteColor(), rotation: 0)
+    private var fromValues = AnimationValues(cornerRadius: 0, color: UIColor.whiteColor(), rotation: 0, borderWidth: 1.0)
     
     ///Contains the values for the toggled checkmark, configure with ::configureUntoggledValues
-    private var toValues = AnimationValues(cornerRadius: 0, color: UIColor.whiteColor(), rotation: 0)
+    private var toValues = AnimationValues(cornerRadius: 0, color: UIColor.whiteColor(), rotation: 0, borderWidth: 0.0)
     
     // MARK: Inits
     convenience init() {
@@ -102,13 +109,12 @@ import UIKit
     /**
      Set the values of the untoggled checkToggle
      
-     :param: cornerRadius The untoggled corner radius.
      :param: color The untoggled color.
      :param: rotation The rotation distance on toggle (Clockwise)
 
      */
-    func setUntoggledValues(cornerRadius cornerRadius: CGFloat = 0, color: UIColor = UIColor.whiteColor(), rotation: Float = Float(M_PI)) {
-        fromValues = AnimationValues(cornerRadius: cornerRadius, color: color, rotation: rotation)
+    func setUntoggledValues(color: UIColor = UIColor.whiteColor(), rotation: Float = Float(M_PI)) {
+        fromValues = AnimationValues(cornerRadius: initialCornerRadius, color: color, rotation: rotation, borderWidth: 0.5)
         if state == .untoggled {
             configureWithAnimationValues(fromValues)
         }
@@ -117,13 +123,12 @@ import UIKit
     /**
      Set the values of the toggled checkToggle
      
-     :param: cornerRadius The toggled corner radius.
      :param: color The toggled color.
      :param: rotation The rotation distance on untoggle (Counter-Clockwise)
      
      */
-    func setToggledValues(cornerRadius cornerRadius: CGFloat = 0, color: UIColor = UIColor.whiteColor(), rotation: Float = Float(M_PI)) {
-        toValues = AnimationValues(cornerRadius: cornerRadius, color: color, rotation: rotation)
+    func setToggledValues(color: UIColor = UIColor.whiteColor(), rotation: Float = Float(M_PI)) {
+        toValues = AnimationValues(cornerRadius: containerSize/2, color: color, rotation: rotation, borderWidth: 0.0)
         if state == .toggled {
             configureWithAnimationValues(toValues)
         }
@@ -132,7 +137,7 @@ import UIKit
     // MARK: Private Methods
     // MARK: Animations
     
-    ///Toggles the checkmark using simple CAAnimations
+    ///Toggles the checkmark
     private func toggleOn() {
         
         let containerAnimations = createContainerAnimation(fromValues, endValues: toValues)
@@ -143,20 +148,18 @@ import UIKit
             self.delegate!.checkStateChanged(self.state)
         }
         containerView.layer.addAnimation(containerAnimations, forKey: "startContainerAnimations")
+        containerView.layer.cornerRadius = self.toValues.cornerRadius
+        containerView.backgroundColor = self.toValues.color
+        containerView.layer.borderWidth = toValues.borderWidth
+        CATransaction.commit()
         
-        UIView.animateWithDuration(duration, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .CurveEaseIn, animations: {
+        UIView.animateWithDuration(duration, delay: 0, usingSpringWithDamping: 4, initialSpringVelocity: 0, options: .CurveEaseIn, animations: {
             self.checkmark.alpha = 1.0
             self.checkmark.transform = CGAffineTransformMakeScale(1.0, 1.0)
             }, completion: nil)
-        
-        containerView.layer.cornerRadius = self.toValues.cornerRadius
-        containerView.backgroundColor = self.toValues.color
-        checkmark.alpha = 1.0
-        checkmark.transform = CGAffineTransformMakeScale(1.0, 1.0)
-        CATransaction.commit()
     }
     
-    ///Untoggles the checkmark using simple CAAnimations
+    ///Untoggles the checkmark
     private func toggleOff() {
         
         let containerAnimations = createContainerAnimation(toValues, endValues: fromValues)
@@ -167,23 +170,20 @@ import UIKit
             self.delegate!.checkStateChanged(self.state)
         }
         containerView.layer.addAnimation(containerAnimations, forKey: "startContainerAnimations")
+        containerView.layer.cornerRadius = self.fromValues.cornerRadius
+        containerView.backgroundColor = self.fromValues.color
+        containerView.layer.borderWidth = fromValues.borderWidth
+
+        CATransaction.commit()
         
-        UIView.animateWithDuration(duration, delay: 0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0, options: .CurveEaseIn, animations: { 
+        UIView.animateWithDuration(duration, delay: 0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0, options: .CurveEaseIn, animations: {
             self.checkmark.alpha = 0.0
             self.checkmark.transform = CGAffineTransformMakeScale(0.0001, 0.0001)
             }, completion: nil)
-        
-        containerView.layer.cornerRadius = self.fromValues.cornerRadius
-        containerView.backgroundColor = self.fromValues.color
-        checkmark.alpha = 0.0
-        checkmark.transform = CGAffineTransformMakeScale(0.0001, 0.0001)
-        CATransaction.commit()
     }
     
     private func createContainerAnimation(startValues: AnimationValues, endValues: AnimationValues) -> CAAnimationGroup {
         let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
-//        rotationAnimation.damping = 10
-//        rotationAnimation.mass = 1
         rotationAnimation.fromValue = startValues.rotation
         rotationAnimation.toValue = endValues.rotation
         
@@ -195,40 +195,17 @@ import UIKit
         colorAnimation.fromValue = startValues.color
         colorAnimation.toValue = endValues.color
         
+        let borderWidth = CABasicAnimation(keyPath: "borderWidth")
+        borderWidth.fromValue = startValues.borderWidth
+        borderWidth.toValue = endValues.borderWidth
+        
         let animations:CAAnimationGroup = CAAnimationGroup()
-        animations.animations = [rotationAnimation, cornerRadiusAnimation, colorAnimation]
+        animations.animations = [rotationAnimation, cornerRadiusAnimation, colorAnimation, borderWidth]
         animations.duration = duration
         animations.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
         
         return animations
     }
-    
-//    private func createCheckAnimation() -> CAAnimationGroup {
-//        let checkScale = CABasicAnimation(keyPath: "transform.scale")
-//        let checkAlpha = CABasicAnimation(keyPath: "alpha")
-//        if state == .toggled{
-//            checkScale.fromValue = 1.0
-//            checkScale.toValue = 0.01
-//            
-//            checkAlpha.fromValue = 1.0
-//            checkAlpha.toValue = 0.0
-//        } else {
-//            checkScale.fromValue = 0.01
-//            checkScale.toValue = 1.0
-//            
-//            checkAlpha.fromValue = 0.0
-//            checkAlpha.toValue = 1.0
-//        }
-//
-//        
-//        
-//        let animations = CAAnimationGroup()
-//        animations.animations = [checkScale, checkAlpha]
-//        animations.duration = duration
-//        animations.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseIn)
-//        
-//        return animations
-//    }
     
     // MARK: View Configuration
     override func updateConstraints() {
@@ -239,8 +216,9 @@ import UIKit
     
     private func configureSubviews() {
         backgroundColor = .clearColor()
-        
-        containerView.layer.cornerRadius = 5.0
+        clipsToBounds = false
+        containerView.layer.borderColor = UIColor.darkGrayColor().CGColor
+        containerView.layer.borderWidth = 0.5
         containerView.addTarget(self, action: #selector(JNCheckToggle.animateToggle), forControlEvents: .TouchUpInside)
 
         checkmark.transform = CGAffineTransformMakeScale(0.0001, 0.0001)
@@ -253,11 +231,16 @@ import UIKit
     }
     
     private func applyConstraints() {
-        containerView.fillSuperview()
+        containerView.addConstraints(
+            Constraint.cxcx.of(self),
+            Constraint.cycy.of(self),
+            Constraint.wh.of(containerSize)
+        )
         
         checkmark.addConstraints(
-            Constraint.llrr.of(self, offset: 3),
-            Constraint.ttbb.of(self, offset: 3)
+            Constraint.cxcx.of(self),
+            Constraint.cycy.of(self),
+            Constraint.wh.of(containerSize * 0.7)
         )
     }
     
