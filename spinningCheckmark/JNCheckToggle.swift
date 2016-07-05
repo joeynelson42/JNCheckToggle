@@ -9,9 +9,9 @@
 protocol JNCheckToggleDelegate {
     
     /**
-     Called when the state of the checkToggle changes
+     Called when the state of the checkToggle changes.
      
-     :param: state The new state of the checkToggle
+     :param: state The new state of the checkToggle.
      */
     func checkStateChanged(state: CheckToggleState)
 }
@@ -48,6 +48,9 @@ import UIKit
     private let containerView = UIButton()
     private let checkmark = UIImageView()
     
+    /// Alerted on state change
+    internal var delegate: JNCheckToggleDelegate?
+    
     /// The state of the checkToggle
     internal var state = CheckToggleState.untoggled
     
@@ -57,7 +60,6 @@ import UIKit
             configureStyle()
         }
     }
-    internal var delegate: JNCheckToggleDelegate?
     
     /// The duration of the toggle animation
     internal var duration = 0.4
@@ -65,8 +67,8 @@ import UIKit
     /// The untoggled cornerRadius
     internal var initialCornerRadius: CGFloat = 2.0
     
-    /// The size of the checkToggle
-    internal var containerSize:CGFloat = 40
+    /// The diameter of the checkToggle
+    internal var diameter:CGFloat = 40
     
     ///Contains the values for the untoggled checkmark, configure with ::configureToggledValues
     private var fromValues = AnimationValues(cornerRadius: 0, color: UIColor.whiteColor(), rotation: 0, borderWidth: 1.0)
@@ -107,28 +109,26 @@ import UIKit
     }
     
     /**
-     Set the values of the untoggled checkToggle
+     Set the color of the untoggled checkToggle
      
      :param: color The untoggled color.
-     :param: rotation The rotation distance on toggle (Clockwise)
 
      */
-    func setUntoggledValues(color: UIColor = UIColor.whiteColor(), rotation: Float = Float(M_PI)) {
-        fromValues = AnimationValues(cornerRadius: initialCornerRadius, color: color, rotation: rotation, borderWidth: 0.5)
+    func setUntoggledColor(color: UIColor = UIColor.whiteColor()) {
+        fromValues = AnimationValues(cornerRadius: initialCornerRadius, color: color, rotation: Float(M_PI), borderWidth: 0.5)
         if state == .untoggled {
             configureWithAnimationValues(fromValues)
         }
     }
     
     /**
-     Set the values of the toggled checkToggle
+     Set the color of the toggled checkToggle
      
      :param: color The toggled color.
-     :param: rotation The rotation distance on untoggle (Counter-Clockwise)
      
      */
-    func setToggledValues(color: UIColor = UIColor.whiteColor(), rotation: Float = Float(M_PI)) {
-        toValues = AnimationValues(cornerRadius: containerSize/2, color: color, rotation: rotation, borderWidth: 0.0)
+    func setToggledColor(color: UIColor = UIColor.whiteColor()) {
+        toValues = AnimationValues(cornerRadius: diameter/2, color: color, rotation: 0, borderWidth: 0.0)
         if state == .toggled {
             configureWithAnimationValues(toValues)
         }
@@ -217,6 +217,7 @@ import UIKit
     private func configureSubviews() {
         backgroundColor = .clearColor()
         clipsToBounds = false
+        
         containerView.layer.borderColor = UIColor.darkGrayColor().CGColor
         containerView.layer.borderWidth = 0.5
         containerView.addTarget(self, action: #selector(JNCheckToggle.animateToggle), forControlEvents: .TouchUpInside)
@@ -231,17 +232,83 @@ import UIKit
     }
     
     private func applyConstraints() {
-        containerView.addConstraints(
-            Constraint.cxcx.of(self),
-            Constraint.cycy.of(self),
-            Constraint.wh.of(containerSize)
-        )
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        checkmark.translatesAutoresizingMaskIntoConstraints = false
         
-        checkmark.addConstraints(
-            Constraint.cxcx.of(self),
-            Constraint.cycy.of(self),
-            Constraint.wh.of(containerSize * 0.7)
-        )
+        let containerCenterX = NSLayoutConstraint(item: containerView,
+                                                  attribute: .CenterX,
+                                                  relatedBy: .Equal,
+                                                  toItem: self,
+                                                  attribute: .CenterX,
+                                                  multiplier: 1.0,
+                                                  constant: 0)
+        
+        let containerCenterY = NSLayoutConstraint(item: containerView,
+                                                  attribute: .CenterY,
+                                                  relatedBy: .Equal,
+                                                  toItem: self,
+                                                  attribute: .CenterY,
+                                                  multiplier: 1.0,
+                                                  constant: 0)
+        
+        let containerCenterWidth = NSLayoutConstraint(item: containerView,
+                                                  attribute: .Width,
+                                                  relatedBy: .Equal,
+                                                  toItem: nil,
+                                                  attribute: .NotAnAttribute,
+                                                  multiplier: 1.0,
+                                                  constant: diameter)
+        
+        let containerCenterHeight = NSLayoutConstraint(item: containerView,
+                                                  attribute: .Height,
+                                                  relatedBy: .Equal,
+                                                  toItem: nil,
+                                                  attribute: .NotAnAttribute,
+                                                  multiplier: 1.0,
+                                                  constant: diameter)
+        
+        
+        let checkmarkCenterX = NSLayoutConstraint(item: checkmark,
+                                                  attribute: .CenterX,
+                                                  relatedBy: .Equal,
+                                                  toItem: self,
+                                                  attribute: .CenterX,
+                                                  multiplier: 1.0,
+                                                  constant: 0)
+        
+        let checkmarkCenterY = NSLayoutConstraint(item: checkmark,
+                                                  attribute: .CenterY,
+                                                  relatedBy: .Equal,
+                                                  toItem: self,
+                                                  attribute: .CenterY,
+                                                  multiplier: 1.0,
+                                                  constant: 0)
+        
+        let checkmarkCenterWidth = NSLayoutConstraint(item: checkmark,
+                                                      attribute: .Width,
+                                                      relatedBy: .Equal,
+                                                      toItem: nil,
+                                                      attribute: .NotAnAttribute,
+                                                      multiplier: 1.0,
+                                                      constant: diameter * 0.7)
+        
+        let checkmarkCenterHeight = NSLayoutConstraint(item: checkmark,
+                                                       attribute: .Height,
+                                                       relatedBy: .Equal,
+                                                       toItem: nil,
+                                                       attribute: .NotAnAttribute,
+                                                       multiplier: 1.0,
+                                                       constant: diameter * 0.7)
+        
+        containerCenterX.active = true
+        containerCenterY.active = true
+        containerCenterWidth.active = true
+        containerCenterHeight.active = true
+        
+        checkmarkCenterX.active = true
+        checkmarkCenterY.active = true
+        checkmarkCenterWidth.active = true
+        checkmarkCenterHeight.active = true
     }
     
     private func configureWithAnimationValues(values: AnimationValues) {

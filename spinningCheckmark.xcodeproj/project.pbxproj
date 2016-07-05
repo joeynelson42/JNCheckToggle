@@ -7,27 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		810282C71D274B7A005E7142 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810282C61D274B7A005E7142 /* View.swift */; };
 		81F97C981D2701CF00DDF728 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F97C971D2701CF00DDF728 /* AppDelegate.swift */; };
 		81F97C9A1D2701CF00DDF728 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F97C991D2701CF00DDF728 /* ViewController.swift */; };
 		81F97C9F1D2701CF00DDF728 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81F97C9E1D2701CF00DDF728 /* Assets.xcassets */; };
 		81F97CA21D2701CF00DDF728 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81F97CA01D2701CF00DDF728 /* LaunchScreen.storyboard */; };
-		81F97CAA1D27020700DDF728 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F97CA91D27020700DDF728 /* View.swift */; };
-		81F97CAC1D27021B00DDF728 /* APConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F97CAB1D27021B00DDF728 /* APConstraints.swift */; };
 		81F97CAE1D2702F500DDF728 /* JNCheckToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F97CAD1D2702F500DDF728 /* JNCheckToggle.swift */; };
-		81F97CB01D27111300DDF728 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F97CAF1D27111300DDF728 /* UIColor+.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		810282C61D274B7A005E7142 /* View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		81F97C941D2701CF00DDF728 /* spinningCheckmark.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = spinningCheckmark.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		81F97C971D2701CF00DDF728 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		81F97C991D2701CF00DDF728 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		81F97C9E1D2701CF00DDF728 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		81F97CA11D2701CF00DDF728 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		81F97CA31D2701CF00DDF728 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		81F97CA91D27020700DDF728 /* View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
-		81F97CAB1D27021B00DDF728 /* APConstraints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APConstraints.swift; sourceTree = "<group>"; };
 		81F97CAD1D2702F500DDF728 /* JNCheckToggle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JNCheckToggle.swift; sourceTree = "<group>"; };
-		81F97CAF1D27111300DDF728 /* UIColor+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,10 +58,8 @@
 			children = (
 				81F97C971D2701CF00DDF728 /* AppDelegate.swift */,
 				81F97C991D2701CF00DDF728 /* ViewController.swift */,
-				81F97CA91D27020700DDF728 /* View.swift */,
+				810282C61D274B7A005E7142 /* View.swift */,
 				81F97CAD1D2702F500DDF728 /* JNCheckToggle.swift */,
-				81F97CAF1D27111300DDF728 /* UIColor+.swift */,
-				81F97CAB1D27021B00DDF728 /* APConstraints.swift */,
 				81F97C9E1D2701CF00DDF728 /* Assets.xcassets */,
 				81F97CA01D2701CF00DDF728 /* LaunchScreen.storyboard */,
 				81F97CA31D2701CF00DDF728 /* Info.plist */,
@@ -105,6 +99,7 @@
 				TargetAttributes = {
 					81F97C931D2701CF00DDF728 = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = 2RF92UCMKX;
 					};
 				};
 			};
@@ -145,10 +140,8 @@
 			files = (
 				81F97CAE1D2702F500DDF728 /* JNCheckToggle.swift in Sources */,
 				81F97C9A1D2701CF00DDF728 /* ViewController.swift in Sources */,
+				810282C71D274B7A005E7142 /* View.swift in Sources */,
 				81F97C981D2701CF00DDF728 /* AppDelegate.swift in Sources */,
-				81F97CAA1D27020700DDF728 /* View.swift in Sources */,
-				81F97CAC1D27021B00DDF728 /* APConstraints.swift in Sources */,
-				81F97CB01D27111300DDF728 /* UIColor+.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -255,10 +248,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = spinningCheckmark/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = JoeyNelson.spinningCheckmark;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -266,10 +262,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = spinningCheckmark/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = JoeyNelson.spinningCheckmark;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -292,6 +291,7 @@
 				81F97CA81D2701CF00DDF728 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
